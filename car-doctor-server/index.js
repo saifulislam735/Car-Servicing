@@ -7,7 +7,6 @@ const app = express()
 const port = process.env.PORT || 5000
 
 app.use(cors({
-    origin: ['https://car-servicings.vercel.app/'],
     "methods": ["GET", "POST", "PATCH", "DELETE", "OPTIONS"], // 
     credentials: true, 
 }));
