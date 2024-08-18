@@ -12,6 +12,7 @@ app.use(cors({
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
 }));
+
 app.use(express.json());
 
 app.use((req, res, next) => {
