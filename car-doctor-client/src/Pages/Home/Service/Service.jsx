@@ -32,7 +32,7 @@ const Service = () => {
     // console.log(search)
     // console.log(minimumPrice, maximumPrice)
     useEffect(() => {
-        fetch(`https://car-servicings-9paq.vercel.app/services?search=${search}&order=${order}&minPrice=${minimumPrice}&maxPrice=${maximumPrice}`)
+        fetch(`https://car-servicings-9paq.vercel.app/api/services?search=${search}&order=${order}&minPrice=${minimumPrice}&maxPrice=${maximumPrice}`)
             .then(res => res.json())
             .then(data => setServices(data))
     }, [order, minimumPrice, maximumPrice, search])
