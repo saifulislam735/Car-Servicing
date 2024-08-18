@@ -19,7 +19,7 @@ app.use((req, res, next) => {
     console.log(`Received request for ${req.method} ${req.url}`);
     next();
 });
-  
+
 // MongoDB Client
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.6obomcw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
@@ -82,6 +82,64 @@ async function run() {
         });
 
         // Other routes...
+
+        app.get('/bookings/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) };
+                const options = {
+                    projection: { title: 1, img: 1, price: 1 },
+                };
+
+                const result = await serviceCollection.find(query, options).toArray();
+                if (result.length === 0) {
+                    return res.status(404).json({ error: 'Booking not found' });
+                }
+                res.json(result);
+            } catch (error) {
+                console.error('Error fetching booking:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+
+        app.post('/bookings', async (req, res) => {
+            try {
+                const data = req.body;
+                const result = await bookingsCollection.insertOne(data);
+                res.status(201).json(result);
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+
+        app.get('/order/:email', VerifyJWT, async (req, res) => {
+            try {
+                const decoded = req.decoded.email;
+                const email = req.params.email;
+                if (decoded !== email) {
+                    return res.status(403).send({ error: 1, message: 'forbidden access' });
+                }
+
+                const query = { logged_email: email };
+                const result = await bookingsCollection.find(query).toArray();
+                res.json(result);
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+
+        app.post('/jwt', async (req, res) => {
+            try {
+                const user = req.body;
+                const token = jwt.sign(user, process.env.ACESS_TOKEN, { expiresIn: '1h' });
+                res.json({ token });
+            } catch (error) {
+                console.error('Error generating JWT:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
 
         // Ping MongoDB to confirm connection
         await client.db("admin").command({ ping: 1 });
