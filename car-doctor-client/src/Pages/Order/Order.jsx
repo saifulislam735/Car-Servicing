@@ -10,7 +10,7 @@ const Order = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:5000/order/${user.email}`,
+            fetch(`https://car-servicings-9paq.vercel.app/order/${user.email}`,
                 //this is for jwt token
                 {
                     method: 'GET',

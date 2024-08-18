@@ -35,7 +35,7 @@ const Booking = () => {
 
         //console.log(service_booking_data);
 
-        fetch("http://localhost:5000/bookings", {
+        fetch("https://car-servicings-9paq.vercel.app/bookings", {
             method: "POST",
             body: JSON.stringify(service_booking_data),
             headers: {
