@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
                 const logged_user = {
                     email: user.email
                 }
-                fetch(`https://car-servicings-9paq.vercel.app/api/jwt`, {
+                fetch(`https://car-servicing-api.onrender.com/jwt`, {
                     method: "POST",
                     body: JSON.stringify(logged_user),
                     headers: {
